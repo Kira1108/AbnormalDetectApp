@@ -132,3 +132,4 @@ model_files/*
 videos/*
 images/*
 datasets
+.DS_Store
