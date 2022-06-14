@@ -12,18 +12,23 @@
 
 
 
-from app.database import get_db, SessionLocal
-from app.models import VideoModel
-from fastapi import Depends
-from sqlalchemy.orm import Session
+# from app.database import get_db, SessionLocal
+# from app.models import VideoModel
+# from fastapi import Depends
+# from sqlalchemy.orm import Session
 
-def get_next_video(db: Session):
-    return db.query(VideoModel)\
-        .filter(VideoModel.is_processed == 0)\
-        .order_by(VideoModel.create_time.asc())\
-        .first()
-
-print(get_next_video(SessionLocal()).video_path)
+# def get_next_video(db: Session):
+#     return db.query(VideoModel)\
+#         .filter(VideoModel.is_processed == 0)\
+#         .order_by(VideoModel.create_time.asc())\
+#         .first()
+from app.database import SessionLocal
+from app.crud import get_next_video,update_video_status
+db = SessionLocal()
+if video := get_next_video(db):
+    update_video_status(db, video.content_id)
+else:
+    print("No video to process")
 
 
 

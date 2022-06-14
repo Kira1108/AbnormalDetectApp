@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from app import routers
 from app.database import create_mysql_database_if_not_exists, engine
+from app.config import create_tmp_folders
 from app.models import Base
 
 
@@ -15,6 +16,7 @@ app.include_router(routers.videos.router)
 @app.on_event("startup")
 def init_db():
     create_mysql_database_if_not_exists()
+    create_tmp_folders()
     Base.metadata.create_all(bind=engine)
 
 

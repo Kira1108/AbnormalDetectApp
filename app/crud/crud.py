@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import update
 from app.models import OCRModel, TextModel, SexModel, VideoModel
 
 def save_ocr_result(db:Session, ocr_result, content_id, image_id, image_path):
@@ -55,4 +56,8 @@ def get_next_video(db: Session):
         .filter(VideoModel.is_processed == 0)\
         .order_by(VideoModel.create_time.asc())\
         .first()
+
+def update_video_status(db: Session, content_id:str):
+    db.execute(update(VideoModel).where(VideoModel.content_id == content_id).values(is_processed = True))
+    db.commit()
 
