@@ -7,7 +7,6 @@ paddlepaddle==2.3.0
 paddleocr==2.5.0.3
 Pillow==9.1.1
 html2text==2020.1.16
-# cairosvg
 fastapi==0.70.1
 tensorflow-hub==0.12.0
 uvicorn==0.16.0
@@ -16,4 +15,6 @@ PyMySQL==1.0.2
 multimethod==1.8
 kafka-python==2.0.2
 APScheduler==3.9.1
-python-multipart-0.0.5
+python-multipart==0.0.5
+PyMySQL==1.0.2
+SQLAlchemy==1.4.37

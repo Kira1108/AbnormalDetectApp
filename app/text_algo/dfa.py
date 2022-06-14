@@ -132,5 +132,4 @@ class DFAParser():
                     "sensitive_words":words
                 }
             )
-            
         return TextInfo(result = result)
