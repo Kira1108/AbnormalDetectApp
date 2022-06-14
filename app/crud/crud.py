@@ -19,15 +19,15 @@ def save_ocr_result(db:Session, ocr_result, content_id, image_id, image_path):
 
 
 def save_text_result(db:Session, text_result, content_id):
-    text_record = text_result.result[0]
-    text_model = TextModel(
-        content_id = content_id,
-        text = text_record['text'],
-        sensitive = text_record['sensitive'],
-        sensitive_words = str(text_record['sensitive_words'])
-    )
-    db.add(text_model)
-    db.commit()
+    for record in text_result:
+        text_model = TextModel(
+            content_id = content_id,
+            text = record['text'],
+            sensitive = record['sensitive'],
+            sensitive_words = str(record['sensitive_words'])
+        )
+        db.add(text_model)
+        db.commit()
 
 
 def save_sex_result(db:Session, sex_result, content_id, image_id, image_path):
