@@ -37,13 +37,27 @@ class CommonImageFileReader(Reader):
 #         return np.array(background)
 
 
+def b64string2numpy(b64string):
+    """Convert a base64 encoded string to numpy array
+    Args:
+        b64string (_type_): string of encoded bytes
+        format (str, optional): string of byte
+    Returns:
+        _type_: np.array
+    """
+    
+    # if isinstance(b64string, str):
+    #     b64string = b64string.encode()
+    
+    buff = io.BytesIO(base64.b64decode(b64string))
+    image = Image.open(buff)
+    return np.array(image)
+
 @dataclass
 class Base64Reader(Reader):
     content:str
     def read(self):
-        imgdata = base64.b64decode(self.content)
-        image = Image.open(io.BytesIO(imgdata)).convert('RGB')
-        return np.array(image)
+        return b64string2numpy(self.content)
 
 
 PROCESSORS = {

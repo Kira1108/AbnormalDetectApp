@@ -13,7 +13,6 @@ from app.database import get_db
 from sqlalchemy.orm import Session
 
 
-
 ocr = Ocr(use_gpu=USE_GPU)
 sex = SexDetector()
 window = AbnormaWindowDetect()
@@ -28,7 +27,7 @@ class OcrResponse(BaseModel):
     result: List[BboxInfo]
 
 
-@router.get("/ocr", response_model=OcrResponse)
+@router.get("/ocr_local", response_model=OcrResponse)
 async def parse_ocr(path:str, db: Session = Depends(get_db)):
     img = ImageReader(path).read()
     r = ocr.detect(img)
@@ -36,7 +35,7 @@ async def parse_ocr(path:str, db: Session = Depends(get_db)):
     return OcrResponse(result = r)
 
 
-@router.get("/sex", response_model=SexInfo)
+@router.get("/sex_local", response_model=SexInfo)
 async def parse_sex(path:str, db: Session = Depends(get_db)):
     img = ImageReader(path).read()
     r = sex.predict(img)
@@ -44,8 +43,36 @@ async def parse_sex(path:str, db: Session = Depends(get_db)):
     return r
 
 
-@router.get("/window", response_model=AbnWindowInfo)
+@router.get("/window_local", response_model=AbnWindowInfo)
 async def parse_window(path:str):
     img = ImageReader(path).read()
+    return window.predict(img)
+
+# == post requests
+
+class Base64Input(BaseModel):
+    image:str
+
+@router.post("/ocr", response_model=OcrResponse)
+async def parse_ocr(image:Base64Input, db: Session = Depends(get_db)):
+    print(image.image)
+    img = ImageReader(content = image.image).read()
+    print(img.shape)
+    r = ocr.detect(img)
+    save_ocr_result(db, r,md5_id(), 0, "")
+    return OcrResponse(result = r)
+
+
+@router.post("/sex", response_model=SexInfo)
+async def parse_sex(image:Base64Input, db: Session = Depends(get_db)):
+    img = ImageReader(content = image.image).read()
+    r = sex.predict(img)
+    save_sex_result(db, r, md5_id(), 0, "")
+    return r
+
+
+@router.post("/window", response_model=AbnWindowInfo)
+async def parse_window(image:Base64Input):
+    img = ImageReader(image.image).read()
     return window.predict(img)
 
