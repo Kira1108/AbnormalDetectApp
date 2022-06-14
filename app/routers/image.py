@@ -55,9 +55,7 @@ class Base64Input(BaseModel):
 
 @router.post("/ocr", response_model=OcrResponse)
 async def parse_ocr(image:Base64Input, db: Session = Depends(get_db)):
-    print(image.image)
     img = ImageReader(content = image.image).read()
-    print(img.shape)
     r = ocr.detect(img)
     save_ocr_result(db, r,md5_id(), 0, "")
     return OcrResponse(result = r)

@@ -51,7 +51,11 @@ def b64string2numpy(b64string):
     
     buff = io.BytesIO(base64.b64decode(b64string))
     image = Image.open(buff)
-    return np.array(image)
+    
+    image = np.array(image)
+    if image.shape[-1] == 4:
+        image = image[:, :, :3]
+    return image
 
 @dataclass
 class Base64Reader(Reader):
