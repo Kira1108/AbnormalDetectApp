@@ -19,7 +19,7 @@ def save_ocr_result(db:Session, ocr_result, content_id, image_id, image_path):
 
 
 def save_text_result(db:Session, text_result, content_id):
-    for record in text_result:
+    for record in text_result.result:
         text_model = TextModel(
             content_id = content_id,
             text = record['text'],
