@@ -3,10 +3,10 @@ from fastapi import APIRouter
 from typing import List, Dict
 from .image import ocr, sex, window
 from .text import dfa_parser
-from app.ocr import BboxInfo
-from app.text_algo import TextInfo
-from app.abn_window_algo import AbnWindowInfo
-from app.sex_algo import SexInfo
+from app.ai.ocr import BboxInfo
+from app.ai.text_algo import TextInfo
+from app.ai.abn_window_algo import AbnWindowInfo
+from app.ai.sex_algo import SexInfo
 from app.reader import ImageReader
 import operator
 import json

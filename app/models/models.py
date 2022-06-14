@@ -42,6 +42,15 @@ class TextModel(Base):
     sensitive_words = Column(Text)
 
 
+class VideoModel(Base):
+    __tablename__ = 'videos'
+    id = Column(Integer, primary_key=True, index=True)
+    content_id = Column(Text)
+    create_time = Column(DateTime, default = func.now())
+    video_path = Column(String(200))
+    is_processed = Column(Boolean, default = False)
+
+
 
 
 

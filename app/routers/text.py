@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from typing import List
 
-from app.text_algo import DFAParser, TextInfo
+from app.ai.text_algo import DFAParser, TextInfo
 from app.utils import md5_id
 from app.crud import save_text_result
 from app.database import get_db

@@ -1,8 +1,6 @@
-from logging import StringTemplateStyle
 from fastapi import APIRouter
 from pydantic import BaseModel
 from app.reader.html import SimpleHtmlReader, HTMLInfo
-from typing import Optional
 from typing import List
 
 

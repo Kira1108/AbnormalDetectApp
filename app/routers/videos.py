@@ -1,19 +1,12 @@
-from fastapi import APIRouter
-from fastapi import FastAPI, File, UploadFile
-from pydantic import BaseModel
-import string
-import random
+from fastapi import APIRouter,File, UploadFile, Depends
 import os
+from app.config import VIDEO_FILE_PATH
+from app.crud import save_video_raw
+from app.utils import md5_id
+from app.database import get_db
 
-video_path = "/data/code/wanghuan/web_abnormal/videos"
+from sqlalchemy.orm import Session
 
-
-
-
-def random_filename(length=8):
-    return ''.join(
-        random.choices(string.ascii_letters + string.digits, k=length)
-        ) + ".mp4"
 
 router = APIRouter(
     prefix="/video",
@@ -21,22 +14,26 @@ router = APIRouter(
     responses={404: {"description": "Not found"}})
 
 @router.post("/videofile")
-async def create_file(file: bytes = File(default=None)):
-    filepath = os.path.join(video_path, random_filename())
+async def create_file(file: bytes = File(default=None),db: Session = Depends(get_db)):
+    content_id = md5_id()
+    filepath = os.path.join(VIDEO_FILE_PATH, f"{content_id}.mp4")
     with open(filepath, "wb") as f:
         f.write(file)
-    return {"succee":1, "filepath":filepath}
+    save_video_raw(db, filepath, content_id)
+    return {"succee":True, "filepath":filepath,"content_id":content_id}
 
 
 @router.post("/videoupload")
-async def upload(file: UploadFile = File(...)):
+async def upload(file: UploadFile = File(...), db: Session = Depends(get_db)):
+    content_id = md5_id()
     try:
         contents = await file.read()
-        filepath = os.path.join(video_path, file.filename)
+        filepath = os.path.join(VIDEO_FILE_PATH, f"{content_id}.mp4")
         with open(filepath, 'wb') as f:
             f.write(contents)
+        save_video_raw(db, filepath, content_id)
     except Exception:
-        return {"message": "There was an error uploading the file"}
+        return {"message": "There was an error uploading the video file"}
     finally:
         await file.close()
-    return {"message": f"Successfuly uploaded {file.filename}"}
+    return {"succee":True, "filepath":filepath,"content_id":content_id}

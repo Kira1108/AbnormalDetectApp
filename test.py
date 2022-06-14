@@ -12,4 +12,18 @@
 
 
 
-import requests
+from app.database import get_db, SessionLocal
+from app.models import VideoModel
+from fastapi import Depends
+from sqlalchemy.orm import Session
+
+def get_next_video(db: Session):
+    return db.query(VideoModel)\
+        .filter(VideoModel.is_processed == 0)\
+        .order_by(VideoModel.create_time.asc())\
+        .first()
+
+print(get_next_video(SessionLocal()).video_path)
+
+
+

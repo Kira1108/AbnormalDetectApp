@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.models import OCRModel, TextModel, SexModel
+from app.models import OCRModel, TextModel, SexModel, VideoModel
 
 def save_ocr_result(db:Session, ocr_result, content_id, image_id, image_path):
     for box in ocr_result:
@@ -40,3 +40,19 @@ def save_sex_result(db:Session, sex_result, content_id, image_id, image_path):
 
     db.add(sex)
     db.commit()
+
+def save_video_raw(db:Session, video_path:str, content_id):
+    video = VideoModel(
+        video_path = video_path, 
+        content_id = content_id, 
+        is_processed = False)
+    db.add(video)
+    db.commit()
+
+
+def get_next_video(db: Session):
+    return db.query(VideoModel)\
+        .filter(VideoModel.is_processed == 0)\
+        .order_by(VideoModel.create_time.asc())\
+        .first()
+

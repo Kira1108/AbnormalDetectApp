@@ -2,14 +2,15 @@ from fastapi import APIRouter, Depends
 from typing import List
 from pydantic import BaseModel
 
-from app.ocr import Ocr, BboxInfo
-from app.sex_algo import SexDetector, SexInfo
-from app.abn_window_algo import AbnWindowInfo, AbnormaWindowDetect
+from app.ai.ocr import Ocr, BboxInfo
+from app.ai.sex_algo import SexDetector, SexInfo
+from app.ai.abn_window_algo import AbnWindowInfo, AbnormaWindowDetect
 from app.reader import ImageReader
 from app.config import USE_GPU
 from app.utils import md5_id
-from app.crud import save_ocr_result,save_sex_result
+from app.crud import save_ocr_result,save_sex_result, save_text_result
 from app.database import get_db
+from .text import dfa_parser
 from sqlalchemy.orm import Session
 
 
@@ -67,6 +68,25 @@ async def parse_sex(image:Base64Input, db: Session = Depends(get_db)):
     r = sex.predict(img)
     save_sex_result(db, r, md5_id(), 0, "")
     return r
+
+@router.post("/all")
+async def parse_all(image:Base64Input, db: Session = Depends(get_db)):
+    img = ImageReader(content = image.image).read()
+
+    content_id = md5_id()
+
+    r_sex = sex.predict(img)
+    save_sex_result(db, r_sex, content_id, 0, "")
+
+    r_ocr = ocr.detect(img)
+    save_ocr_result(db, r_ocr, content_id, 0, "")
+
+    texts = [t.text for t in r_ocr]
+    r_text = dfa_parser.parse(texts)
+    save_text_result(db, r_text, content_id)
+
+    return {"sex_result": r_sex.sex_model_result, "text_result": r_text.result}
+
 
 
 @router.post("/window", response_model=AbnWindowInfo)
