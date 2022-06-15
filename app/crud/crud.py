@@ -57,7 +57,10 @@ def get_next_video(db: Session):
         .order_by(VideoModel.create_time.asc())\
         .first()
 
-def update_video_status(db: Session, content_id:str):
-    db.execute(update(VideoModel).where(VideoModel.content_id == content_id).values(is_processed = True))
+
+def update_video_status(db: Session, video):
+    db.execute(update(VideoModel)\
+        .where(VideoModel.content_id == video.content_id)\
+        .values(is_processed = True))
     db.commit()
 
