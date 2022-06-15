@@ -12,7 +12,7 @@ def extract_video(video_path:str, dest:str = "./videodata", file_prefix = "frame
     base_name = os.path.basename(video_path).split(".")[0]
     
     # make a folder that stores frame results
-    video_target_path = os.path.join(dest, base_name + str(get_now()))
+    video_target_path = os.path.join(dest, base_name)
     os.makedirs(video_target_path,exist_ok = True)
     
     # capture video frames 1 frame at a time

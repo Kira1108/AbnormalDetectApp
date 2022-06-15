@@ -51,6 +51,15 @@ class VideoModel(Base):
     is_processed = Column(Boolean, default = False)
 
 
+class VideoFrames(Base):
+    __tablename__ = 'video_frames'
+    id = Column(Integer, primary_key=True, index=True)
+    video_content_id = Column(Text)
+    image_content_id = Column(Text)
+    image_path = Column(String(200))
+    create_time = Column(DateTime, default = func.now())
+
+
 
 
 

@@ -1,6 +1,11 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import update
-from app.models import OCRModel, TextModel, SexModel, VideoModel
+from app.models import (
+    OCRModel, 
+    TextModel, 
+    SexModel, 
+    VideoModel, 
+    VideoFrames)
 
 def save_ocr_result(db:Session, ocr_result, content_id, image_id, image_path):
     for box in ocr_result:
@@ -62,5 +67,15 @@ def update_video_status(db: Session, video):
     db.execute(update(VideoModel)\
         .where(VideoModel.content_id == video.content_id)\
         .values(is_processed = True))
+    db.commit()
+
+
+def save_video_frame(db: Session, video_content_id, image_content_id, image_path):
+    video_frame = VideoFrames(
+        video_content_id = video_content_id,
+        image_content_id = image_content_id,
+        image_path = image_path
+    )
+    db.add(video_frame)
     db.commit()
 

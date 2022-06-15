@@ -17,11 +17,16 @@ app.include_router(routers.videos.router)
 
 
 @app.on_event("startup")
-def init_db():
+def init_project():
+
+    # create database and folders
     create_mysql_database_if_not_exists()
     create_tmp_folders()
+
+    # create all tables
     Base.metadata.create_all(bind=engine)
 
+    # start video processing thread
     consumer = Thread(target=process_next_video)
     consumer.start()
 
