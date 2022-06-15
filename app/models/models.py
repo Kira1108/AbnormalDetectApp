@@ -1,7 +1,14 @@
-from sqlalchemy import Boolean, Column, Integer, String, Text, DateTime, Float
+from sqlalchemy import (
+    Boolean, 
+    Column, 
+    Integer, 
+    String, 
+    Text, 
+    DateTime, 
+    Float)
 from sqlalchemy.sql import func
-from app.database import Base
 
+from app.database import Base
 
 class OCRModel(Base):
     __tablename__ = 'ocr_result'
@@ -58,8 +65,3 @@ class VideoFrames(Base):
     image_content_id = Column(Text)
     image_path = Column(String(200))
     create_time = Column(DateTime, default = func.now())
-
-
-
-
-

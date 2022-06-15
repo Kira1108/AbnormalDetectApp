@@ -1,17 +1,42 @@
 from app.crud import (
     get_next_video, 
     update_video_status,
-    save_video_frame)
-from app.reader import extract_video
+    save_video_frame,
+    save_sex_result,
+    save_ocr_result,
+    save_text_result)
+
+from app.routers.image import (ocr, sex)
+from app.routers.text import dfa_parser
+from app.reader import extract_video, ImageReader
 from app.config import VIDEO_EXTRACT_PATH
 from app.database import SessionLocal
 from app.utils import md5_id
+
 import os
-import shutil
 import time
 import logging
 import glob
+from sqlalchemy.orm import Session
 logger = logging.getLogger('uvicorn')
+
+
+
+def process_image(db:Session, image_path:str, content_id:str):
+    img = ImageReader(path = image_path).read()
+
+    image_id = int(os.path.basename(image_path).split(".")[0].split("_")[-1])
+
+    r_sex = sex.predict(img)
+    save_sex_result(db, r_sex, content_id, image_id, image_path)
+
+    r_ocr = ocr.detect(img)
+    save_ocr_result(db, r_ocr, content_id, image_id, image_path)
+
+    texts = [t.text for t in r_ocr]
+    r_text = dfa_parser.parse(texts)
+    save_text_result(db, r_text, content_id)
+
 
 
 def process_next_video():
@@ -21,7 +46,6 @@ def process_next_video():
         if video is None:
             logger.info("No video to process")
             time.sleep(5)
-        
         else:
             extract_video(video.video_path, VIDEO_EXTRACT_PATH)
             dest_path = os.path.join(VIDEO_EXTRACT_PATH, video.content_id)
@@ -31,9 +55,13 @@ def process_next_video():
             image_files = glob.glob(os.path.join(dest_path, "*.jpg"))
             for im in image_files:
                 image_content_id = md5_id()
-                save_video_frame(SessionLocal(), video.content_id, image_content_id, im)
+                try:
+                    logger.info(f"Processing image: {im}")
+                    save_video_frame(SessionLocal(), video.content_id, image_content_id, im)
+                    process_image(SessionLocal(), im, image_content_id)
+                except Exception as e:
+                    logger.error(f"Error processing image {im}")
+                    logger.error(e)
 
             # update processing status
             update_video_status(SessionLocal(), video)
-
-        
