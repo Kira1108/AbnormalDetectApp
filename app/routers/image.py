@@ -85,7 +85,19 @@ async def parse_all(image:Base64Input, db: Session = Depends(get_db)):
     r_text = dfa_parser.parse(texts)
     save_text_result(db, r_text, content_id)
 
-    return {"sex_result": r_sex.sex_model_result, "text_result": r_text.result}
+    text_sensitive = any(record['sensitive'] for record in r_text.result)
+
+    sex_dic = r_sex.sex_model_result
+
+    max_key = max(sex_dic, key = sex_dic.get)
+    sex_sensitive = max_key in ['hentai','porn','sexy'] and sex_dic[max_key] > 50
+
+    return {
+        "image_content_id":content_id,
+        "is_sensitive":text_sensitive or sex_sensitive,
+        "sex_result": r_sex.sex_model_result, 
+        "text_result": r_text.result
+        }
 
 
 
