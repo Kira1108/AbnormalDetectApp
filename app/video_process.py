@@ -67,6 +67,10 @@ def process_next_video():
 
             # update processing status
             update_video_status(SessionLocal(), video)
+            # import json
+            # json_content = json.dumps(get_video_result(video.content_id))
+            # with open("videojson.json",'w') as f:
+            #     f.write(json_content)
 
         if VIDEO_CALLBACK_URL != "":
             requests.post(VIDEO_CALLBACK_URL, json=get_video_result(video.content_id))

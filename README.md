@@ -34,3 +34,64 @@ USE_GPU = False # 是否使用GPU
 ```bash
 ./start_app.sh
 ```
+
+## 图片接口
+请求接口
+
+```bash
+curl -X 'POST' \
+  'http://127.0.0.1:8000/image/all' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "image": "iVBORw0KGgoAAAANSUhEUgAACagAAAFICAYAAAC/NYsHAAAMamlDQ1BJQ0MgUHJvZmlsZQAASImVlwdYU8kWgOeWJCQkoQQiICX0JkivUkJoEQSkCjZCEkgoMSYEFTu6qODaRRQruiqi6FoAWVTEXhbF3hcLKsq6WFAUlTchAV33le/N982d/545c86Zc2fuvQOAVg9PKs1FtQHIk+TL4iNCWGNS01ikp4AAjAAKAPDl8eVSdlxcNGQw0P69vL8BEGV71Ulp65/9/7XoCoRyPgDIOMgZAjk/D3ITAPh6vlSWDwBRKbecki9V8hzIejIYIORVSs5S8U4lZ6i4sV8nMZ4D+TIAGlQeT5YFAP0elLMK+FnQDv0zZBeJQCwBQGsY5EC+iCeArIx9WF7eJCWXQ7aD+lLIMB7gk/Gdzay/2c8YtM/jZQ2yal79RSNULJfm8qb9n6n53yUvVzHgwwZWqkgWGa+cP8zhrZxJUUqmQu6UZMTEKnMNuUcsUOUdAJQiUkQmqfRRY76cA/"
+}'
+```
+
+返回示例
+```json
+{
+  "image_content_id": "d08716b395986a3ba2176a24fd52fe72",
+  "is_sensitive": true,
+  "sex_result": {
+    "drawings": 6.3732999999999995,
+    "hentai": 0.2313,
+    "neutral": 93.3058,
+    "porn": 0.0217,
+    "sexy": 0.0679
+  },
+  "text_result": [
+    {
+      "text": "Environment Variables",
+      "sensitive": false,
+      "sensitive_words": []
+    },
+    {
+      "text": "When you start the mysql image, you can adjust the configuration of the MysQL instance by passing one or more environment variables on the docker run command line. Do note",
+      "sensitive": false,
+      "sensitive_words": []
+    }
+
+  ]
+}
+```
+
+## 视频接口
+请求接口
+```python
+curl -X 'POST' \
+  'http://127.0.0.1:8000/video/videofile' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'file=@big_buck_bunny_720p_5mb.mp4;type=video/mp4'
+```
+
+返回示例
+```json
+{
+  "succee": true,
+  "filepath": "videos/raw_videos/34a976b28637f557aadc7d309e9e4e00.mp4",
+  "content_id": "34a976b28637f557aadc7d309e9e4e00"
+}
+```
+

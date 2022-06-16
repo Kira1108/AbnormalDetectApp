@@ -23,17 +23,17 @@ async def create_file(file: bytes = File(default=None),db: Session = Depends(get
     return {"succee":True, "filepath":filepath,"content_id":content_id}
 
 
-@router.post("/videoupload")
-async def upload(file: UploadFile = File(...), db: Session = Depends(get_db)):
-    content_id = md5_id()
-    try:
-        contents = await file.read()
-        filepath = os.path.join(VIDEO_FILE_PATH, f"{content_id}.mp4")
-        with open(filepath, 'wb') as f:
-            f.write(contents)
-        save_video_raw(db, filepath, content_id)
-    except Exception:
-        return {"message": "There was an error uploading the video file"}
-    finally:
-        await file.close()
-    return {"succee":True, "filepath":filepath,"content_id":content_id}
+# @router.post("/videoupload")
+# async def upload(file: UploadFile = File(...), db: Session = Depends(get_db)):
+#     content_id = md5_id()
+#     try:
+#         contents = await file.read()
+#         filepath = os.path.join(VIDEO_FILE_PATH, f"{content_id}.mp4")
+#         with open(filepath, 'wb') as f:
+#             f.write(contents)
+#         save_video_raw(db, filepath, content_id)
+#     except Exception:
+#         return {"message": "There was an error uploading the video file"}
+#     finally:
+#         await file.close()
+#     return {"succee":True, "filepath":filepath,"content_id":content_id}
