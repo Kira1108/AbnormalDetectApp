@@ -4,12 +4,13 @@ from app.crud import (
     save_video_frame,
     save_sex_result,
     save_ocr_result,
-    save_text_result)
+    save_text_result,
+    get_video_result)
 
 from app.routers.image import (ocr, sex)
 from app.routers.text import dfa_parser
 from app.reader import extract_video, ImageReader
-from app.config import VIDEO_EXTRACT_PATH
+from app.config import VIDEO_EXTRACT_PATH, VIDEO_CALLBACK_URL
 from app.database import SessionLocal
 from app.utils import md5_id
 
@@ -17,6 +18,7 @@ import os
 import time
 import logging
 import glob
+import requests
 from sqlalchemy.orm import Session
 logger = logging.getLogger('uvicorn')
 
@@ -65,3 +67,7 @@ def process_next_video():
 
             # update processing status
             update_video_status(SessionLocal(), video)
+
+        if VIDEO_CALLBACK_URL != "":
+            requests.post(VIDEO_CALLBACK_URL, json=get_video_result(video.content_id))
+    
