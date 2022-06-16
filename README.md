@@ -14,6 +14,13 @@ python -m venv env
 pip install -r requirements.txt
 ```
 ## 4. 配置
+更改数据库地址
+app/database.py
+```python
+SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:root123@localhost:5306/app_db"
+```
+
+
 app/config.py
 ```python
 SEX_IMAGE_DIM = 224 # 鉴黄色图片尺寸
