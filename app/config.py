@@ -10,6 +10,7 @@ VIDEO_EXTRACT_PATH = "videos/video_frames" # 抽帧存储文件夹路径
 VIDEO_KEEP_RECENT_DAYS = 1 # 保留最近几天的视频文件
 VIDEO_REMOVE_INTERVAL = 30 # 多少分钟调度清除任务一次
 VIDEO_CALLBACK_URL = "" # 视屏处理结果回调地址
+KPS = 1 # 每秒多少帧
 USE_GPU = False # 是否使用GPU
 
 

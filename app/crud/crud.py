@@ -22,6 +22,7 @@ def save_ocr_result(db:Session, ocr_result, content_id, image_id, image_path):
         )
         db.add(box_result)
         db.commit()
+        db.close()
 
 
 def save_text_result(db:Session, text_result, content_id):
@@ -34,6 +35,7 @@ def save_text_result(db:Session, text_result, content_id):
         )
         db.add(text_model)
         db.commit()
+        db.close()
 
 
 def save_sex_result(db:Session, sex_result, content_id, image_id, image_path):
@@ -46,6 +48,7 @@ def save_sex_result(db:Session, sex_result, content_id, image_id, image_path):
 
     db.add(sex)
     db.commit()
+    db.close()
 
 def save_video_raw(db:Session, video_path:str, content_id):
     video = VideoModel(
@@ -54,13 +57,16 @@ def save_video_raw(db:Session, video_path:str, content_id):
         is_processed = False)
     db.add(video)
     db.commit()
+    db.close()
 
 
 def get_next_video(db: Session):
-    return db.query(VideoModel)\
+    result = db.query(VideoModel)\
         .filter(VideoModel.is_processed == 0)\
         .order_by(VideoModel.create_time.asc())\
         .first()
+    db.close()
+    return result
 
 
 def update_video_status(db: Session, video):
@@ -68,6 +74,7 @@ def update_video_status(db: Session, video):
         .where(VideoModel.content_id == video.content_id)\
         .values(is_processed = True))
     db.commit()
+    db.close()
 
 
 def save_video_frame(db: Session, video_content_id, image_content_id, image_path):
@@ -78,4 +85,5 @@ def save_video_frame(db: Session, video_content_id, image_content_id, image_path
     )
     db.add(video_frame)
     db.commit()
+    db.close()
 

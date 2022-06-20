@@ -10,7 +10,7 @@ from app.crud import (
 from app.routers.image import (ocr, sex)
 from app.routers.text import dfa_parser
 from app.reader import extract_video, ImageReader
-from app.config import VIDEO_EXTRACT_PATH, VIDEO_CALLBACK_URL
+from app.config import VIDEO_EXTRACT_PATH, VIDEO_CALLBACK_URL, KPS
 from app.database import SessionLocal
 from app.utils import md5_id
 
@@ -49,7 +49,7 @@ def process_next_video():
             logger.info("No video to process")
             time.sleep(5)
         else:
-            extract_video(video.video_path, VIDEO_EXTRACT_PATH)
+            extract_video(video.video_path, VIDEO_EXTRACT_PATH, kps = KPS)
             dest_path = os.path.join(VIDEO_EXTRACT_PATH, video.content_id)
             logger.info(f"Extracting video from {video.video_path} to {dest_path}")
 
