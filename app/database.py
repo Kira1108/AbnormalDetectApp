@@ -9,9 +9,10 @@ SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:root123@localhost:5306/app_db"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
-    pool_size = 100,
-    max_overflow = 100,
-    pool_recycle = 3600
+    pool_size = 50,
+    max_overflow = 50,
+    pool_recycle = 3600,
+    pool_timeout = 3600
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
