@@ -1,0 +1,47 @@
+{
+  "video_content_id": "0380aceafcdc615ae5dcae6e893210d7",
+  "is_sensitive": true,
+  "sex_result": {
+    "is_sensitive": false,
+    "sex_images": [
+      {
+        "image_content_id": "b79558b3a887d5900cda65dded3f541f",
+        "drawings": 0.3938,
+        "hentai": 3.5093,
+        "neutral": 33.0526,
+        "porn": 61.5685,
+        "sex": 1.4758,
+        "is_sensitive": true
+      }
+    ]
+  },
+  "text_result": {
+    "is_sensitive": true,
+    "illegal_text": [
+      {
+        "image_content_id": "9907396b9550f247849686842620a637",
+        "text": "/scrape/site Scrape Site",
+        "is_sensitive": 1,
+        "sensitive_words": "['rape', 'rape']",
+        "topleft": "[283, 2041]",
+        "bottomright": "[497, 2079]"
+      },
+      {
+        "image_content_id": "9907396b9550f247849686842620a637",
+        "text": "/scrape/site Scrape Site",
+        "is_sensitive": 1,
+        "sensitive_words": "['rape', 'rape']",
+        "topleft": "[298, 1962]",
+        "bottomright": "[889, 2007]"
+      },
+      {
+        "image_content_id": "9907396b9550f247849686842620a637",
+        "text": "/scrape/site Scrape Site",
+        "is_sensitive": 1,
+        "sensitive_words": "['rape', 'rape']",
+        "topleft": "[287, 1900]",
+        "bottomright": "[451, 1938]"
+      }
+    ]
+  }
+}

@@ -102,3 +102,57 @@ curl -X 'POST' \
 }
 ```
 
+
+回调接口返回示例
+```json
+{
+  "video_content_id": "0380aceafcdc615ae5dcae6e893210d7", // 视频ID
+  "is_sensitive": true, // 整个视频
+  "sex_result": {  //涉黄监测结果
+    "is_sensitive": true, //整个视频是否涉黄 
+    "sex_images": [ // 涉黄的图片list， 有多张图片都存在这个list里面
+      {
+        "image_content_id": "b79558b3a887d5900cda65dded3f541f", // 图片id
+        "drawings": 0.3938, // 普通绘画的概率
+        "hentai": 3.5093, // 黄色绘画的概率
+        "neutral": 33.0526, // 中性图片的概率
+        "porn": 61.5685, // 黄色图片的概率
+        "sex": 1.4758, // 性感图片的概率
+        "is_sensitive": true // 图片是否涉黄敏感
+      }
+    ]
+  },
+  "text_result": { // ocr后文字监测的结果
+    "is_sensitive": true, // 整个视频是否有敏感文字
+    "illegal_text": [ //有敏感文字的图片，文字内容，敏感文字内容，敏感文字位置
+      {
+        "image_content_id": "9907396b9550f247849686842620a637", //图片id
+        "text": "/scrape/site Scrape Site", // 敏感文字原始信息
+        "is_sensitive": 1, // 是否敏感
+        "sensitive_words": "['rape', 'rape']", // 敏感文字列表
+        "topleft": "[283, 2041]", // 敏感文字左上角坐标
+        "bottomright": "[497, 2079]" // 敏感文字右下角坐标
+      },
+      {
+        "image_content_id": "9907396b9550f247849686842620a637",
+        "text": "/scrape/site Scrape Site",
+        "is_sensitive": 1,
+        "sensitive_words": "['rape', 'rape']",
+        "topleft": "[298, 1962]",
+        "bottomright": "[889, 2007]"
+      },
+      {
+        "image_content_id": "9907396b9550f247849686842620a637",
+        "text": "/scrape/site Scrape Site",
+        "is_sensitive": 1,
+        "sensitive_words": "['rape', 'rape']",
+        "topleft": "[287, 1900]",
+        "bottomright": "[451, 1938]"
+      }
+    ]
+  }
+}
+
+```
+
+
