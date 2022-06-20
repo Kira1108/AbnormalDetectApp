@@ -104,7 +104,7 @@ curl -X 'POST' \
 
 
 回调接口返回示例
-```json
+```txt
 {
   "video_content_id": "0380aceafcdc615ae5dcae6e893210d7", // 视频ID
   "is_sensitive": true, // 整个视频
