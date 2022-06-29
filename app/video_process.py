@@ -74,5 +74,6 @@ def process_next_video():
                 f.write(json_content)
 
         if VIDEO_CALLBACK_URL != "":
+            logger.info("Sending callback to: {VIDEO_CALLBACK_URL}, Video Content id: {video.content_id}")
             requests.post(VIDEO_CALLBACK_URL, json=get_video_result(video.content_id))
     
