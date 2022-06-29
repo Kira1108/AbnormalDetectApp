@@ -48,6 +48,7 @@ def process_next_video():
         if video is None:
             logger.info("No video to process")
             time.sleep(5)
+            continue
         else:
             extract_video(video.video_path, VIDEO_EXTRACT_PATH, kps = KPS)
             dest_path = os.path.join(VIDEO_EXTRACT_PATH, video.content_id)
